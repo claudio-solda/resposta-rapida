@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resposta Rápida</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#0b1220">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1220; --card:#16213a; --card2:#1c2a48; --border:#243252;
+  --text:#e7ecf5; --muted:#8b95ab; --blue:#38bdf8; --amber:#f59e0b; --red:#f87171; --yellow:#fbbf24;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;}
+body{
+  min-height:100vh; background:var(--bg); color:var(--text);
+  font-family:'Inter',system-ui,sans-serif; font-size:15px;
+  padding:0 0 calc(96px + env(safe-area-inset-bottom,0px)) 0;
+  padding-top:env(safe-area-inset-top,0px);
+}
+h1,h2,h3{font-family:'Poppins',sans-serif;margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px;}
+
+/* topo */
+.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0 10px;}
+.top h1{font-size:21px;font-weight:800;letter-spacing:.2px;}
+.top small{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-family:'Inter',sans-serif;font-weight:400;}
+.icon-btn{background:var(--card);border:1px solid var(--border);color:var(--text);width:42px;height:42px;border-radius:12px;font-size:18px;}
+
+/* indicadores */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 12px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;border-top-width:3px;}
+.kpi b{display:block;font-family:'Poppins',sans-serif;font-size:22px;line-height:1.1;}
+.kpi span{font-size:11px;color:var(--muted);}
+.kpi.red{border-top-color:var(--red);} .kpi.yellow{border-top-color:var(--yellow);}
+.kpi.amber{border-top-color:var(--amber);} .kpi.blue{border-top-color:var(--blue);}
+
+/* abas */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:8px;}
+.tab{flex:none;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:8px 13px;border-radius:999px;font-size:13px;font-weight:600;}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#0b1220;}
+.search{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:11px 13px;font-size:14px;margin-bottom:12px;}
+
+/* cartões do quadro */
+.card{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px 12px 18px;margin-bottom:10px;position:relative;overflow:hidden;color:var(--text);}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cor,var(--red));}
+.card.c-red{--cor:var(--red);} .card.c-yellow{--cor:var(--yellow);} .card.c-blue{--cor:var(--blue);}
+.card .l1{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.card .num{font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;color:#0b1220;background:var(--cor,var(--red));white-space:nowrap;}
+.card .desc{margin:6px 0 8px;font-size:14px;color:#cfd7e6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);}
+.meta b{color:var(--text);font-weight:600;}
+.vazio{text-align:center;color:var(--muted);padding:34px 10px;border:1px dashed var(--border);border-radius:14px;}
+
+/* botão flutuante */
+.fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--blue);color:#0b1220;border:0;border-radius:16px;padding:15px 20px;font-weight:800;font-family:'Poppins',sans-serif;font-size:15px;box-shadow:0 8px 22px rgba(56,189,248,.32);z-index:5;}
+
+/* formulário */
+.sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.sec.destaque{border-color:var(--amber);background:linear-gradient(180deg,rgba(245,158,11,.10),var(--card));}
+.sec h3{font-size:15px;margin-bottom:10px;}
+label{display:block;font-size:12.5px;color:var(--muted);margin:10px 0 4px;}
+input,select,textarea{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 12px;font-size:15px;font-family:inherit;}
+textarea{min-height:76px;resize:vertical;}
+input[type=checkbox]{width:22px;height:22px;padding:0;accent-color:var(--blue);}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:0;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.btn{background:var(--blue);color:#0b1220;border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:15px;}
+.btn.sec2{background:var(--card2);color:var(--text);border:1px solid var(--border);}
+.btn.perigo{background:transparent;color:var(--red);border:1px solid var(--red);}
+.btn.peq{padding:9px 12px;font-size:13px;}
+.barra{position:fixed;left:0;right:0;bottom:0;background:rgba(11,18,32,.96);border-top:1px solid var(--border);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;z-index:6;}
+.barra .btn{flex:1;}
+.voltar{background:none;border:0;color:var(--blue);font-weight:700;font-size:14px;padding:14px 0 6px;}
+.acao{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;}
+.acao .topo{display:flex;gap:10px;align-items:center;}
+.acao .topo input[type=text]{flex:1;}
+.acao .x{background:none;border:0;color:var(--red);font-size:20px;width:34px;height:34px;}
+.fotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.foto{position:relative;width:92px;height:92px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.foto img{width:100%;height:100%;object-fit:cover;}
+.foto button{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:50%;width:24px;height:24px;font-size:14px;line-height:1;}
+.dica{font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* reunião */
+.bloco-t{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin:16px 0 8px;display:flex;justify-content:space-between;}
+.bloco-t span{color:var(--muted);font-weight:500;}
+.linha-acao{background:var(--card);border:1px solid var(--border);border-left:5px solid var(--red);border-radius:10px;padding:9px 12px;margin-bottom:8px;font-size:13.5px;}
+.linha-acao small{color:var(--muted);display:block;margin-top:3px;}
+
+/* menu */
+.fundo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;display:flex;align-items:flex-end;}
+.folha{background:var(--card);width:100%;max-width:720px;margin:0 auto;border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));display:grid;gap:10px;}
+.folha h3{margin-bottom:2px;}
+
+@media print{
+  :root{--bg:#fff;--card:#fff;--card2:#fff;--border:#999;--text:#000;--muted:#444;}
+  body{padding:0;}
+  .fab,.barra,.icon-btn,.tabs,.search,.voltar,.no-print{display:none !important;}
+  .card,.sec{break-inside:avoid;}
+  input,select,textarea{border:1px solid #999;}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="modal"></div>
+<input type="file" id="arqImport" accept="application/json" style="display:none">
+<input type="file" id="arqFoto" accept="image/*" capture="environment" style="display:none">
+
+<script>
+const KEY = "resposta_rapida_v1";
+let db = { seq: 0, items: [] };
+let tab = "todos", busca = "", cur = null, curNovo = false;
+const $ = id => document.getElementById(id);
+
+/* ---------- dados ---------- */
+function carregar(){ try{ const r = localStorage.getItem(KEY); if(r) db = JSON.parse(r); }catch(e){} if(!db.items) db.items = []; }
+function gravar(){
+  try{ localStorage.setItem(KEY, JSON.stringify(db)); return true; }
+  catch(e){ alert("Memória cheia. Exporte um backup e remova fotos antigas."); return false; }
+}
+
+/* ---------- utilidades ---------- */
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fmtData(d){ const ano = (d||"").split("-"); return ano.length === 3 ? ano[2]+"/"+ano[1]+"/"+ano[0] : "—"; }
+function iso(dt){ return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0"); }
+function hoje(){ return iso(new Date()); }
+function addDias(d, n){ const x = new Date(d+"T00:00:00"); x.setDate(x.getDate()+n); return iso(x); }
+function diasEntre(a, b){ return Math.round((new Date(b+"T00:00:00") - new Date(a+"T00:00:00"))/86400000); }
+function pad3(n){ return String(n).padStart(3,"0"); }
+
+function situacao(p){
+  if(p.status === "fechado") return { k:"fechado", cor:"c-blue", txt:"Fechado" };
+  if(p.dataLimite && p.dataLimite < hoje()) return { k:"atrasado", cor:"c-red", txt:"Atrasado "+diasEntre(p.dataLimite, hoje())+"d" };
+  if(p.status === "andamento") return { k:"andamento", cor:"c-yellow", txt:"Em andamento" };
+  return { k:"aberto", cor:"c-red", txt:"Aberto" };
+}
+function prazoTxt(p){
+  if(!p.dataLimite) return "sem prazo";
+  if(p.status === "fechado") return fmtData(p.dataLimite);
+  const d = diasEntre(hoje(), p.dataLimite);
+  if(d < 0) return fmtData(p.dataLimite)+" (venceu)";
+  if(d === 0) return fmtData(p.dataLimite)+" (hoje)";
+  if(d === 1) return fmtData(p.dataLimite)+" (amanhã)";
+  return fmtData(p.dataLimite)+" (em "+d+" dias)";
+}
+function novoVazio(){
+  return { id:0, num:0, abertura:hoje(), peca:"", cliente:"", detectado:"interno", qtd:"", descricao:"", fotos:[],
+    responsavel:"", dataLimite:"", etapa:"D0", status:"aberto",
+    contencao:"", inspecionadas:"", rejeitadas:"", dataContencao:"",
+    causaOcorrencia:"", causaEscape:"", porques:"",
+    acoes:[], verificacao:"", fechamento:"" };
+}
+
+/* ---------- lista (quadro) ---------- */
+function ordenar(a, b){
+  const fa = a.status === "fechado", fb = b.status === "fechado";
+  if(fa !== fb) return fa ? 1 : -1;
+  if(fa && fb) return (b.fechamento||"").localeCompare(a.fechamento||"");
+  return (a.dataLimite||"9999").localeCompare(b.dataLimite||"9999");
+}
+function filtrar(p){
+  const s = situacao(p).k;
+  if(tab === "abertos" && s === "fechado") return false;
+  if(tab === "atrasados" && s !== "atrasado") return false;
+  if(tab === "fechados" && s !== "fechado") return false;
+  if(busca){
+    const t = [pad3(p.num), p.peca, p.cliente, p.descricao, p.responsavel].join(" ").toLowerCase();
+    if(t.indexOf(busca.toLowerCase()) < 0) return false;
+  }
+  return true;
+}
+function cardHTML(p){
+  const s = situacao(p);
+  const feitas = p.acoes.filter(a => a.feito).length;
+  return `<button class="card ${s.cor}" onclick="abrirEdicao(${p.id})">
+    <div class="l1"><div class="num">#${pad3(p.num)} · ${esc(p.peca || "Sem peça")}${p.cliente ? " · "+esc(p.cliente) : ""}</div><span class="badge">${esc(s.txt)}</span></div>
+    <div class="desc">${esc(p.descricao || "Sem descrição")}</div>
+    <div class="meta"><span>Responsável: <b>${esc(p.responsavel || "—")}</b></span><span>Limite: <b>${prazoTxt(p)}</b></span><span>Etapa: <b>${esc(p.etapa)}</b></span><span>Ações: <b>${feitas}/${p.acoes.length}</b></span></div>
+  </button>`;
+}
+function renderLista(){
+  cur = null;
+  const hj = hoje();
+  const abertos = db.items.filter(p => p.status !== "fechado");
+  const atras = abertos.filter(p => p.dataLimite && p.dataLimite < hj).length;
+  const vencHoje = abertos.filter(p => p.dataLimite === hj).length;
+  const fech = db.items.length - abertos.length;
+  const itens = db.items.slice().sort(ordenar).filter(filtrar);
+  const tabs = [["todos","Todos"],["abertos","Abertos"],["atrasados","Atrasados"],["fechados","Fechados"],["reuniao","Reunião"]];
+  let h = `<div class="top"><div><h1>⚡ Resposta Rápida<small>Quadro de problemas e ações</small></h1></div><button class="icon-btn" onclick="abrirMenu()" aria-label="Menu">⋯</button></div>
+  <div class="kpis">
+    <div class="kpi red"><b>${atras}</b><span>Atrasados</span></div>
+    <div class="kpi yellow"><b>${abertos.length}</b><span>Em aberto</span></div>
+    <div class="kpi amber"><b>${vencHoje}</b><span>Vencem hoje</span></div>
+    <div class="kpi blue"><b>${fech}</b><span>Fechados</span></div>
+  </div>
+  <div class="tabs">${tabs.map(t => `<button class="tab ${tab===t[0]?"on":""}" onclick="setTab('${t[0]}')">${t[1]}</button>`).join("")}</div>`;
+  if(tab === "reuniao"){ h += reuniaoHTML(); }
+  else {
+    h += `<input class="search" id="busca" placeholder="🔎 Buscar por nº, peça, cliente ou responsável" value="${esc(busca)}" oninput="setBusca(this.value)">`;
+    h += `<div id="lista">${itens.length ? itens.map(cardHTML).join("") : '<div class="vazio">Nenhum problema por aqui.<br>Toque em <b>+ Novo problema</b> para registrar.</div>'}</div>`;
+  }
+  h += `<button class="fab" onclick="abrirNovo()">+ Novo problema</button>`;
+  $("app").innerHTML = h;
+  window.scrollTo(0, 0);
+}
+function setTab(t){ tab = t; renderLista(); }
+function setBusca(v){
+  busca = v;
+  const itens = db.items.slice().sort(ordenar).filter(filtrar);
+  $("lista").innerHTML = itens.length ? itens.map(cardHTML).join("") : '<div class="vazio">Nada encontrado.</div>';
+}
+
+/* ---------- reunião diária ---------- */
+function reuniaoHTML(){
+  const hj = hoje();
+  const ab = db.items.filter(p => p.status !== "fechado");
+  const secs = [
+    ["Problemas novos (hoje e ontem)", ab.filter(p => p.abertura >= addDias(hj, -1))],
+    ["Atrasados", ab.filter(p => p.dataLimite && p.dataLimite < hj)],
+    ["Vencem hoje", ab.filter(p => p.dataLimite === hj)],
+    ["Prontos para fechar (todas as ações feitas)", ab.filter(p => p.acoes.length && p.acoes.every(a => a.feito))]
+  ];
+  let h = `<div class="dica no-print" style="margin-bottom:6px">Pauta da reunião em pé: novos, atrasados, o que vence hoje e o que já pode fechar.</div>`;
+  secs.forEach(s => {
+    h += `<div class="bloco-t">${s[0]}<span>${s[1].length}</span></div>`;
+    h += s[1].length ? s[1].map(cardHTML).join("") : '<div class="vazio" style="padding:14px">Nada nesta lista.</div>';
+  });
+  const acoesAtr = [];
+  ab.forEach(p => p.acoes.forEach(a => { if(!a.feito && a.limite && a.limite < hj) acoesAtr.push({p, a}); }));
+  h += `<div class="bloco-t">Ações atrasadas<span>${acoesAtr.length}</span></div>`;
+  h += acoesAtr.length ? acoesAtr.map(x => `<div class="linha-acao"><b>#${pad3(x.p.num)}</b> ${esc(x.a.texto || "Ação sem texto")}<small>Resp.: ${esc(x.a.resp || "—")} · Limite: ${fmtData(x.a.limite)} (${diasEntre(x.a.limite, hj)}d de atraso)</small></div>`).join("") : '<div class="vazio" style="padding:14px">Nenhuma ação atrasada.</div>';
+  return h;
+}
+
+/* ---------- formulário ---------- */
+function abrirNovo(){ cur = novoVazio(); curNovo = true; renderForm(); }
+function abrirEdicao(id){
+  const p = db.items.find(x => x.id === id); if(!p) return;
+  cur = JSON.parse(JSON.stringify(p)); curNovo = false; renderForm();
+}
+function opt(v, rot, sel){ return `<option value="${v}" ${v===sel?"selected":""}>${rot}</option>`; }
+function renderForm(){
+  const p = cur, ys = window.scrollY;
+  const etapas = ["D0","D1","D2","D3","D4","D5","D6","D7","D8"];
+  const acoesH = p.acoes.map((a, i) => `<div class="acao">
+    <div class="topo"><input type="checkbox" id="a_f${i}" ${a.feito?"checked":""} aria-label="Feita"><input type="text" id="a_t${i}" placeholder="O que será feito" value="${esc(a.texto)}"><button class="x" onclick="remAcao(${i})" aria-label="Remover">✕</button></div>
+    <div class="row2"><div><label>Responsável</label><input type="text" id="a_r${i}" value="${esc(a.resp)}"></div><div><label>Data limite</label><input type="date" id="a_l${i}" value="${esc(a.limite)}"></div></div></div>`).join("");
+  const fotosH = p.fotos.map((f, i) => `<div class="foto"><img src="${f}" alt="Foto ${i+1}"><button onclick="remFoto(${i})" aria-label="Remover foto">✕</button></div>`).join("");
+  $("app").innerHTML = `
+  <button class="voltar no-print" onclick="voltarLista()">← Voltar ao quadro</button>
+  <h2 style="margin:4px 0 12px">${curNovo ? "Novo problema" : "Problema #"+pad3(p.num)}</h2>
+
+  <div class="sec destaque"><h3>Responsável e prazo</h3>
+    <label>Responsável pela resolução *</label><input type="text" id="f_resp" value="${esc(p.responsavel)}" placeholder="Nome de quem vai resolver">
+    <div class="row2"><div><label>Data limite para resolver *</label><input type="date" id="f_limite" value="${esc(p.dataLimite)}"></div>
+    <div><label>Status</label><select id="f_status">${opt("aberto","Aberto",p.status)}${opt("andamento","Em andamento",p.status)}${opt("fechado","Fechado",p.status)}</select></div></div>
+    <label>Etapa do 8D</label><select id="f_etapa">${etapas.map(e => opt(e, e, p.etapa)).join("")}</select>
+  </div>
+
+  <div class="sec"><h3>1. O problema</h3>
+    <div class="row2"><div><label>Data de abertura</label><input type="date" id="f_abertura" value="${esc(p.abertura)}"></div>
+    <div><label>Detectado em</label><select id="f_detectado">${opt("interno","Aqui dentro (fábrica)",p.detectado)}${opt("cliente","Pelo cliente",p.detectado)}</select></div></div>
+    <div class="row2"><div><label>Peça / código</label><input type="text" id="f_peca" value="${esc(p.peca)}"></div>
+    <div><label>Cliente</label><input type="text" id="f_cliente" value="${esc(p.cliente)}" placeholder="Ex.: GM"></div></div>
+    <label>Quantidade afetada ou suspeita</label><input type="number" inputmode="numeric" id="f_qtd" value="${esc(p.qtd)}">
+    <label>Descrição do problema *</label><textarea id="f_desc" placeholder="O quê, onde, quanto e quando">${esc(p.descricao)}</textarea>
+    <div class="fotos">${fotosH}</div>
+    <button class="btn sec2 peq" style="margin-top:10px" onclick="addFoto()">📷 Adicionar foto</button>
+    <div class="dica">Fotos são reduzidas para ocupar pouco espaço. Foto vale mais que descrição.</div>
+  </div>
+
+  <div class="sec"><h3>2. Contenção</h3>
+    <label>O que foi feito para proteger o cliente</label><textarea id="f_cont" placeholder="Ex.: inspeção 100% das 5 porcas, lote separado, etiqueta">${esc(p.contencao)}</textarea>
+    <div class="row3"><div><label>Início</label><input type="date" id="f_dcont" value="${esc(p.dataContencao)}"></div>
+    <div><label>Inspecionadas</label><input type="number" inputmode="numeric" id="f_insp" value="${esc(p.inspecionadas)}"></div>
+    <div><label>Rejeitadas</label><input type="number" inputmode="numeric" id="f_rej" value="${esc(p.rejeitadas)}"></div></div>
+  </div>
+
+  <div class="sec"><h3>3. Causa raiz</h3>
+    <label>Por que ocorreu (ocorrência)</label><textarea id="f_cocor">${esc(p.causaOcorrencia)}</textarea>
+    <label>Por que não foi detectado (escape)</label><textarea id="f_cesc">${esc(p.causaEscape)}</textarea>
+    <label>5 Porquês (opcional)</label><textarea id="f_porq" placeholder="1) Por quê? ...">${esc(p.porques)}</textarea>
+  </div>
+
+  <div class="sec"><h3>4. Plano de ação</h3>${acoesH || '<div class="dica">Nenhuma ação ainda. Toda ação precisa de responsável e prazo.</div>'}
+    <button class="btn sec2 peq" style="margin-top:8px" onclick="addAcao()">+ Adicionar ação</button>
+  </div>
+
+  <div class="sec"><h3>5. Verificação e fechamento</h3>
+    <label>Como foi verificado que a correção funciona</label><textarea id="f_verif" placeholder="Ex.: teste com peça-defeito nas 5 posições, registro do turno">${esc(p.verificacao)}</textarea>
+    <label>Data de fechamento</label><input type="date" id="f_fecha" value="${esc(p.fechamento)}">
+  </div>
+
+  ${curNovo ? "" : '<button class="btn perigo" style="width:100%;margin-bottom:12px" onclick="excluir()">Excluir este problema</button>'}
+  <div class="barra no-print"><button class="btn sec2" onclick="compartilhar()">Enviar</button><button class="btn sec2" onclick="imprimir()">Imprimir</button><button class="btn" onclick="salvarForm()">Salvar</button></div>`;
+  window.scrollTo(0, ys);
+}
+function v(id){ const e = $(id); return e ? e.value : ""; }
+function sync(){
+  const p = cur;
+  p.responsavel = v("f_resp").trim(); p.dataLimite = v("f_limite"); p.status = v("f_status"); p.etapa = v("f_etapa");
+  p.abertura = v("f_abertura"); p.detectado = v("f_detectado"); p.peca = v("f_peca").trim(); p.cliente = v("f_cliente").trim();
+  p.qtd = v("f_qtd"); p.descricao = v("f_desc").trim();
+  p.contencao = v("f_cont").trim(); p.dataContencao = v("f_dcont"); p.inspecionadas = v("f_insp"); p.rejeitadas = v("f_rej");
+  p.causaOcorrencia = v("f_cocor").trim(); p.causaEscape = v("f_cesc").trim(); p.porques = v("f_porq").trim();
+  p.verificacao = v("f_verif").trim(); p.fechamento = v("f_fecha");
+  p.acoes.forEach((a, i) => {
+    a.feito = $("a_f"+i) ? $("a_f"+i).checked : a.feito; a.texto = v("a_t"+i).trim(); a.resp = v("a_r"+i).trim(); a.limite = v("a_l"+i);
+  });
+}
+function addAcao(){ sync(); cur.acoes.push({ texto:"", resp:cur.responsavel, limite:"", feito:false }); renderForm(); }
+function remAcao(i){ sync(); cur.acoes.splice(i, 1); renderForm(); }
+function remFoto(i){ sync(); cur.fotos.splice(i, 1); renderForm(); }
+function addFoto(){ sync(); $("arqFoto").value = ""; $("arqFoto").click(); }
+$("arqFoto").addEventListener("change", async e => {
+  const f = e.target.files[0]; if(!f || !cur) return;
+  if(cur.fotos.length >= 4){ alert("No máximo 4 fotos por problema."); return; }
+  try{ cur.fotos.push(await comprimir(f)); renderForm(); }catch(err){ alert("Não consegui ler essa foto."); }
+});
+function comprimir(file, max, q){
+  max = max || 640; q = q || 0.6;
+  return new Promise((ok, erro) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas"); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        ok(c.toDataURL("image/jpeg", q));
+      };
+      img.onerror = erro; img.src = r.result;
+    };
+    r.onerror = erro; r.readAsDataURL(file);
+  });
+}
+function salvarForm(){
+  sync(); const p = cur;
+  if(!p.descricao){ alert("Descreva o problema."); return; }
+  if(!p.responsavel){ alert("Informe o responsável pela resolução."); return; }
+  if(!p.dataLimite){ alert("Informe a data limite para resolver."); return; }
+  if(p.status === "fechado" && !p.fechamento) p.fechamento = hoje();
+  if(p.status !== "fechado") p.fechamento = "";
+  if(curNovo){ db.seq = (db.seq || 0) + 1; p.id = Date.now() + db.seq; p.num = db.seq; db.items.push(p); }
+  else { const i = db.items.findIndex(x => x.id === p.id); if(i >= 0) db.items[i] = p; }
+  if(gravar()){ cur = null; renderLista(); }
+}
+function excluir(){
+  if(!confirm("Excluir este problema? Isso não pode ser desfeito.")) return;
+  db.items = db.items.filter(x => x.id !== cur.id); gravar(); cur = null; renderLista();
+}
+function voltarLista(){
+  if(cur){ const antes = JSON.stringify(cur); sync(); if(JSON.stringify(cur) !== antes || curNovo){ if(!confirm("Sair sem salvar as alterações?")) { renderForm(); return; } } }
+  cur = null; renderLista();
+}
+
+/* ---------- resumo, impressão, backup ---------- */
+function resumoTexto(p){
+  const L = [];
+  L.push("RESPOSTA RÁPIDA #"+pad3(p.num || db.seq+1));
+  L.push("Peça: "+(p.peca||"—")+" | Cliente: "+(p.cliente||"—"));
+  L.push("Problema: "+(p.descricao||"—")+(p.qtd ? " (qtd "+p.qtd+")" : ""));
+  L.push("Detectado: "+(p.detectado==="cliente" ? "pelo cliente" : "internamente")+" em "+fmtData(p.abertura));
+  L.push("Responsável: "+(p.responsavel||"—")+" | Limite: "+fmtData(p.dataLimite)+" | Etapa: "+p.etapa);
+  L.push("Contenção: "+(p.contencao||"—")+(p.inspecionadas ? " (inspecionadas "+p.inspecionadas+", rejeitadas "+(p.rejeitadas||0)+")" : ""));
+  L.push("Causa (ocorrência): "+(p.causaOcorrencia||"—"));
+  L.push("Causa (escape): "+(p.causaEscape||"—"));
+  if(p.acoes.length){ L.push("Ações:"); p.acoes.forEach(a => L.push((a.feito?"[x] ":"[ ] ")+(a.texto||"—")+" — "+(a.resp||"—")+", até "+fmtData(a.limite))); }
+  L.push("Status: "+situacao(p).txt);
+  return L.join("\n");
+}
+async function compartilhar(){
+  sync(); const t = resumoTexto(cur);
+  try{
+    if(navigator.share){ await navigator.share({ title:"Resposta Rápida", text:t }); return; }
+    await navigator.clipboard.writeText(t); alert("Resumo copiado. Cole no WhatsApp ou e-mail.");
+  }catch(e){ prompt("Copie o resumo:", t); }
+}
+function imprimir(){ if(cur) sync(); window.print(); }
+function abrirMenu(){
+  $("modal").innerHTML = `<div class="fundo" onclick="fecharMenu()"><div class="folha" onclick="event.stopPropagation()">
+    <h3>Opções</h3>
+    <button class="btn sec2" onclick="fecharMenu();window.print()">🖨 Imprimir o quadro</button>
+    <button class="btn sec2" onclick="exportar()">💾 Salvar backup (arquivo)</button>
+    <button class="btn sec2" onclick="$('arqImport').click()">📂 Restaurar backup</button>
+    <button class="btn sec2" onclick="fecharMenu()">Fechar</button></div></div>`;
+}
+function fecharMenu(){ $("modal").innerHTML = ""; }
+function exportar(){
+  const blob = new Blob([JSON.stringify(db)], { type:"application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "resposta-rapida-backup-"+hoje()+".json"; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000); fecharMenu();
+}
+$("arqImport").addEventListener("change", e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || !Array.isArray(d.items)) throw new Error("formato");
+      if(!confirm("Restaurar o backup? Os dados atuais deste aparelho serão substituídos ("+d.items.length+" problemas no arquivo).")) return;
+      db = d; gravar(); fecharMenu(); renderLista();
+    }catch(err){ alert("Arquivo inválido."); }
+  };
+  r.readAsText(f); e.target.value = "";
+});
+
+/* ---------- início ---------- */
+carregar(); renderLista();
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("sw.js").catch(() => {}); }
+</script>
+</body>
+</html>
